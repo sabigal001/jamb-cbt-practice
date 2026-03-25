@@ -33,7 +33,8 @@ function ResetPasswordContent() {
 
     setStatus('loading');
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const baseUrl = url.endsWith('/') ? url.slice(0, -1) : url;
       const response = await fetch(`${baseUrl}/api/auth/reset-password/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

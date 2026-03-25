@@ -1,5 +1,11 @@
+const getBaseUrl = () => {
+  const url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  // Remove trailing slash if it exists
+  return url.endsWith('/') ? url.slice(0, -1) : url;
+};
+
 export const register = async (userData: any) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const baseUrl = getBaseUrl();
   
   try {
     const response = await fetch(`${baseUrl}/api/auth/register/`, {
@@ -21,7 +27,7 @@ export const register = async (userData: any) => {
 };
 
 export const login = async (credentials: any) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const baseUrl = getBaseUrl();
   
   try {
     const response = await fetch(`${baseUrl}/api/token/`, {
@@ -43,7 +49,7 @@ export const login = async (credentials: any) => {
 };
 
 export const fetchQuestions = async (mode: 'mock' | 'drill', subject?: string) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const baseUrl = getBaseUrl();
   const endpoint = mode === 'mock' 
     ? `/api/questions/mock/?subject=${subject || 'biology'}` 
     : `/api/questions/drill/?subject=${subject || 'biology'}`;
@@ -59,7 +65,7 @@ export const fetchQuestions = async (mode: 'mock' | 'drill', subject?: string) =
 };
 
 export const saveResult = async (token: string, resultData: any) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const baseUrl = getBaseUrl();
   
   try {
     const response = await fetch(`${baseUrl}/api/profile/save_result/`, {
@@ -82,7 +88,7 @@ export const saveResult = async (token: string, resultData: any) => {
 };
 
 export const updateProfile = async (token: string, profileData: any) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const baseUrl = getBaseUrl();
   
   try {
     const response = await fetch(`${baseUrl}/api/profile/update_profile/`, {
@@ -105,7 +111,7 @@ export const updateProfile = async (token: string, profileData: any) => {
 };
 
 export const getHistory = async (token: string) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const baseUrl = getBaseUrl();
   
   try {
     const response = await fetch(`${baseUrl}/api/profile/history/`, {
@@ -122,7 +128,7 @@ export const getHistory = async (token: string) => {
 };
 
 export const getProfile = async (token: string) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const baseUrl = getBaseUrl();
   
   try {
     const response = await fetch(`${baseUrl}/api/profile/`, {
