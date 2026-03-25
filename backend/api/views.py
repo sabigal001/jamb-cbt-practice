@@ -256,7 +256,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
         if recent_history.exists():
             total_score = sum([h.score for h in recent_history])
             total_qs = sum([h.total_questions for h in recent_history])
-            new_accuracy = round((total_score / total_qs) * 100)
+            
+            if total_qs > 0:
+                new_accuracy = round((total_score / total_qs) * 100)
+            else:
+                new_accuracy = 0
             
             # Map frontend subject names to model fields
             subject_field_map = {
