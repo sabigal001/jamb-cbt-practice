@@ -56,7 +56,10 @@ export const fetchQuestions = async (mode: 'mock' | 'drill', subject?: string) =
   
   try {
     const response = await fetch(`${baseUrl}${endpoint}`);
-    if (!response.ok) throw new Error('Failed to fetch questions');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || 'Failed to fetch questions');
+    }
     return await response.json();
   } catch (error) {
     console.error('API Error:', error);

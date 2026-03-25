@@ -147,15 +147,21 @@ class QuestionViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['get'])
     def mock(self, request):
-        subject = request.query_params.get('subject', 'biology')
-        questions = QuestionService.get_questions(subject, mode='mock')
-        return Response(questions)
+        try:
+            subject = request.query_params.get('subject', 'biology')
+            questions = QuestionService.get_questions(subject, mode='mock')
+            return Response(questions)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(detail=False, methods=['get'])
     def drill(self, request):
-        subject = request.query_params.get('subject', 'biology')
-        questions = QuestionService.get_questions(subject, mode='drill')
-        return Response(questions)
+        try:
+            subject = request.query_params.get('subject', 'biology')
+            questions = QuestionService.get_questions(subject, mode='drill')
+            return Response(questions)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]

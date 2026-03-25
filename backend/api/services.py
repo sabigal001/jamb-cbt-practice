@@ -12,7 +12,7 @@ class QuestionService:
     def get_questions(subject, mode='drill'):
         if not ALOC_TOKEN:
             print("ERROR: ALOC_TOKEN not set in environment variables.")
-            return None
+            raise Exception("ALOC_TOKEN not configured on server")
         """
         Fetches questions from ALOC API.
         mode: 'drill' (single/quick) or 'mock' (full set)
@@ -24,6 +24,7 @@ class QuestionService:
             'chemistry': 'chemistry',
             'physics': 'physics',
             'mathematics': 'mathematics',
+            'maths': 'mathematics',
             'economics': 'economics',
             'government': 'government',
             'crs': 'crs',
@@ -99,17 +100,16 @@ class QuestionService:
                                         seen_ids.add(q_id)
                                         if len(questions) >= 10:
                                             break
-                        else:
-                            break
-                    # Ensure we don't return more than 10 for drill
-                    questions = questions[:10]
-
-                print(f"DEBUG: Returning {len(questions)} questions")
+                
+                print(f"DEBUG: Returning {len(questions)} questions for {mapped_subject}")
                 return questions
             else:
-                print(f"DEBUG: ALOC Error Response: {response.text}")
-                return []
+                print(f"DEBUG: ALOC Error: {response.status_code} - {response.text}")
+                raise Exception(f"ALOC API Error: {response.status_code}")
                 
-        except requests.exceptions.RequestException as e:
-            print(f"DEBUG: ALOC Request Exception: {e}")
-            return []
+        except requests.exceptions.Timeout:
+            print("ERROR: ALOC API Timeout")
+            raise Exception("ALOC API Timeout")
+        except Exception as e:
+            print(f"ERROR: QuestionService failure: {e}")
+            raise e
