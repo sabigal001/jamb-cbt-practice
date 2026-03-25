@@ -4,12 +4,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-ALOC_TOKEN = os.getenv('ALOC_TOKEN', 'ALOC-4d1e508cb493e69e4d6b')
+ALOC_TOKEN = os.getenv('ALOC_TOKEN')
 ALOC_BASE_URL = "https://questions.aloc.com.ng/api/v2"
 
 class QuestionService:
     @staticmethod
     def get_questions(subject, mode='drill'):
+        if not ALOC_TOKEN:
+            print("ERROR: ALOC_TOKEN not set in environment variables.")
+            return None
         """
         Fetches questions from ALOC API.
         mode: 'drill' (single/quick) or 'mock' (full set)

@@ -112,8 +112,12 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,https://lamda-wheat.vercel.app').split(',')
 CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://lamda-wheat.vercel.app',
+]
 
 # Email Configuration
 EMAIL_BACKEND = "mailer.backend.DbBackend"
@@ -164,4 +168,4 @@ SIMPLE_JWT = {
 }
 
 # Frontend URL for links in emails
-FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://lamda-wheat.vercel.app')

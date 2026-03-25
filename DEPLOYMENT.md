@@ -16,7 +16,7 @@ Vercel is the best place to host your Next.js frontend.
     *   **Build Command**: `npm run build`
     *   **Output Directory**: `.next`
 4.  **Environment Variables**:
-    *   `NEXT_PUBLIC_API_URL`: Your PythonAnywhere URL (e.g., `https://yourusername.pythonanywhere.com`)
+    *   `NEXT_PUBLIC_API_URL`: `https://yourusername.pythonanywhere.com` (Replace with your actual PythonAnywhere URL)
 5.  **Deploy**: Click "Deploy".
 
 ---
@@ -61,8 +61,9 @@ PythonAnywhere is great for hosting Django backends.
     *   `DJANGO_SECRET_KEY`: (A random string)
     *   `DJANGO_DEBUG`: `False`
     *   `ALLOWED_HOSTS`: `yourusername.pythonanywhere.com`
-    *   `CORS_ALLOWED_ORIGINS`: `https://your-vercel-domain.vercel.app`
-    *   `FRONTEND_URL`: `https://your-vercel-domain.vercel.app`
+    *   `ALOC_TOKEN`: `ALOC-4d1e508cb493e69e4d6b`
+    *   `CORS_ALLOWED_ORIGINS`: `https://lamda-wheat.vercel.app`
+    *   `FRONTEND_URL`: `https://lamda-wheat.vercel.app`
 7.  **Database & Migrations**:
     *   `python manage.py migrate`
     *   `python manage.py collectstatic`
