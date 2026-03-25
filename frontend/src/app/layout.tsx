@@ -9,8 +9,13 @@ export const metadata: Metadata = {
   description: "Master JAMB with Lambda. Practice with 40,000+ past questions, realistic mock exams, and real-time performance tracking. Ace your UTME with confidence.",
   keywords: ["JAMB", "UTME", "CBT Practice", "Nigeria Exams", "Past Questions", "Lambda CBT", "Exam Preparation"],
   authors: [{ name: "Lambda Team" }],
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   robots: "index, follow",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
