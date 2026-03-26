@@ -1,5 +1,6 @@
 import requests
 import os
+import sys
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,8 +11,12 @@ ALOC_BASE_URL = "https://questions.aloc.com.ng/api/v2"
 class QuestionService:
     @staticmethod
     def get_questions(subject, mode='drill'):
+        # Force logs to appear in PythonAnywhere error logs
+        sys.stderr.write(f"DEBUG: QuestionService called for {subject} ({mode})\n")
+        sys.stderr.write(f"DEBUG: ALOC_TOKEN length: {len(ALOC_TOKEN) if ALOC_TOKEN else 0}\n")
+
         if not ALOC_TOKEN:
-            print("ERROR: ALOC_TOKEN not set in environment variables.")
+            sys.stderr.write("ERROR: ALOC_TOKEN not set in environment variables.\n")
             raise Exception("ALOC_TOKEN not configured on server")
         """
         Fetches questions from ALOC API.
@@ -48,13 +53,13 @@ class QuestionService:
             'User-Agent': 'Lambda-JAMB-Portal/1.0'
         }
         
-        print(f"DEBUG: Calling ALOC API: {url} with Token: {ALOC_TOKEN[:8]}...")
+        sys.stderr.write(f"DEBUG: Calling ALOC API: {url} with Token: {ALOC_TOKEN[:8]}...\n")
         
         try:
             # Increased timeout to 90s for Mock exams as they are heavy
             timeout = 90 if mode == 'mock' else 20
             response = requests.get(url, headers=headers, timeout=timeout, verify=True)
-            print(f"DEBUG: ALOC Response Status: {response.status_code}")
+            sys.stderr.write(f"DEBUG: ALOC Response Status: {response.status_code}\n")
             
             if response.status_code == 200:
                 data = response.json()
@@ -66,7 +71,7 @@ class QuestionService:
                 
                 # If we asked for mock but got nothing, fallback to drill for a few questions
                 if mode == 'mock' and not questions:
-                    print(f"DEBUG: Mock returned empty, falling back to drill for {mapped_subject}")
+                    sys.stderr.write(f"DEBUG: Mock returned empty, falling back to drill for {mapped_subject}\n")
                     drill_url = f"{ALOC_BASE_URL}/q?subject={mapped_subject}"
                     drill_res = requests.get(drill_url, headers=headers, timeout=15)
                     if drill_res.status_code == 200:
@@ -77,7 +82,7 @@ class QuestionService:
                 
                 # If it's drill mode and we only got 1 question, try to fetch more to make a set (e.g., 10)
                 if mode == 'drill' and len(questions) < 10:
-                    print(f"DEBUG: Drill returned {len(questions)} questions, fetching more...")
+                    sys.stderr.write(f"DEBUG: Drill returned {len(questions)} questions, fetching more...\n")
                     seen_ids = set()
                     for q in questions:
                         if isinstance(q, dict) and 'id' in q:
@@ -102,15 +107,15 @@ class QuestionService:
                                         if len(questions) >= 10:
                                             break
                 
-                print(f"DEBUG: Returning {len(questions)} questions for {mapped_subject}")
+                sys.stderr.write(f"DEBUG: Returning {len(questions)} questions for {mapped_subject}\n")
                 return questions
             else:
-                print(f"DEBUG: ALOC Error: {response.status_code} - {response.text}")
+                sys.stderr.write(f"DEBUG: ALOC Error: {response.status_code} - {response.text}\n")
                 raise Exception(f"ALOC API Error: {response.status_code}")
                 
         except requests.exceptions.Timeout:
-            print("ERROR: ALOC API Timeout")
+            sys.stderr.write("ERROR: ALOC API Timeout\n")
             raise Exception("ALOC API Timeout")
         except Exception as e:
-            print(f"ERROR: QuestionService failure: {e}")
+            sys.stderr.write(f"ERROR: QuestionService failure: {e}\n")
             raise e
