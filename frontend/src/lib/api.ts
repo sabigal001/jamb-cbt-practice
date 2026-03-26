@@ -1,5 +1,6 @@
 const getBaseUrl = () => {
   const url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  console.log('DEBUG: Using API URL:', url);
   // Remove trailing slash if it exists
   return url.endsWith('/') ? url.slice(0, -1) : url;
 };
