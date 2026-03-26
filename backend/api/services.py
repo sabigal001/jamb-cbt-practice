@@ -45,14 +45,15 @@ class QuestionService:
         headers = {
             'AccessToken': ALOC_TOKEN,
             'Accept': 'application/json',
+            'User-Agent': 'Lambda-JAMB-Portal/1.0'
         }
         
-        print(f"DEBUG: Calling ALOC API: {url}")
+        print(f"DEBUG: Calling ALOC API: {url} with Token: {ALOC_TOKEN[:8]}...")
         
         try:
             # Increased timeout to 90s for Mock exams as they are heavy
             timeout = 90 if mode == 'mock' else 20
-            response = requests.get(url, headers=headers, timeout=timeout)
+            response = requests.get(url, headers=headers, timeout=timeout, verify=True)
             print(f"DEBUG: ALOC Response Status: {response.status_code}")
             
             if response.status_code == 200:
